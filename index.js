@@ -23,7 +23,7 @@ form.addEventListener('submit', function (event) {
     var name = nameInput.value;
     var email = emailInput.value;
     var phone = phoneInput.value;
-    var profilePicture = profilePictureInput.value;
+    var profilePicture = profilePictureInput.files ? profilePictureInput.files[0] : null;
     var education = educationInput.value;
     var experience = experienceInput.value;
     var skills = skillsInput.value.split('&').map(function (skill) { return skill.trim(); });
@@ -32,8 +32,13 @@ form.addEventListener('submit', function (event) {
     displayEmail.textContent = "Email ".concat(email);
     displayPhone.textContent = "Phone No: ".concat(phone);
     if (profilePicture) {
-        displayProfilePicture.src = profilePicture;
-        displayProfilePicture.style.display = 'block';
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var _a;
+            displayProfilePicture.src = (_a = e.target) === null || _a === void 0 ? void 0 : _a.result;
+            displayProfilePicture.style.display = 'block';
+        };
+        reader.readAsDataURL(profilePicture); // Read the image file as a data URL
     }
     else {
         displayProfilePicture.style.display = 'none';
