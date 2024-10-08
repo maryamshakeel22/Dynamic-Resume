@@ -26,7 +26,7 @@ form.addEventListener('submit', (event) => {
     const name = nameInput.value;
     const email = emailInput.value;
     const phone = phoneInput.value;
-    const profilePicture = profilePictureInput.value;
+    const profilePicture = profilePictureInput.files ? profilePictureInput.files[0] : null;
     const education = educationInput.value;
     const experience = experienceInput.value;
     const skills = skillsInput.value.split('&').map(skill => skill.trim());
@@ -37,11 +37,15 @@ form.addEventListener('submit', (event) => {
     displayPhone.textContent = `Phone No: ${phone}`;
     
     if (profilePicture) {
-        displayProfilePicture.src = profilePicture;
-        displayProfilePicture.style.display = 'block';
-    } else {
-        displayProfilePicture.style.display = 'none';
-    }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    displayProfilePicture.src = e.target?.result as string;
+                    displayProfilePicture.style.display = 'block';
+                };
+                reader.readAsDataURL(profilePicture); // Read the image file as a data URL
+            } else {
+                displayProfilePicture.style.display = 'none';
+            }
 
     
     displayEducation.textContent = education;
